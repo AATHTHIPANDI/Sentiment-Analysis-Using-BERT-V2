@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: sentiment-analysis
+    env: python
+    buildCommand: |
+      # Update and install system packages
+      apt-get update
+      if [ -f apt-packages ]; then cat apt-packages | xargs apt-get install -y; fi
+      
+      # Setup pip and install dependencies
+      python -m pip install --upgrade pip
+      pip install --no-cache-dir wheel setuptools
+      pip install --no-cache-dir --only-binary :all: -r requirements.txt
+    startCommand: gunicorn app:app --timeout 120 --workers 1 --threads 2
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: TRANSFORMERS_CACHE
+        value: /tmp/transformers_cache
+      - key: TORCH_HOME
+        value: /tmp/torch_home
+      - key: PIP_NO_CACHE_DIR
+        value: "true"
+      - key: TOKENIZERS_PARALLELISM
+        value: "false"
+      - key: PIP_ONLY_BINARY
+        value: ":all:"
+    disk:
+      name: tmp
+      mountPath: /tmp
+      sizeGB: 1

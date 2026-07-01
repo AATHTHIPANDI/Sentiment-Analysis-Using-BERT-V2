@@ -1,0 +1,12 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+--find-links https://download.pytorch.org/whl/cpu/torch_stable.html
+
+# Core dependencies with specific versions that don't require compilation
+torch==2.5.1+cpu
+transformers==4.36.0
+tokenizers==0.15.0 --only-binary :all:
+numpy==1.24.3
+requests==2.31.0
+beautifulsoup4==4.12.2
+flask==2.3.3
+gunicorn==20.1.0
